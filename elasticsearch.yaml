@@ -1,0 +1,67 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+
+
+metadata:
+  name: elasticsearch
+  labels:
+    app: web-elasticsearch
+    microservice: elasticsearch
+    version: v1
+
+
+spec:
+  containers:
+    - name: elasticsearch
+      image: m4t30r0s4as/elasticsearch:1.0
+      env:
+        - name: discovery.type
+        - value:
+          valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: discovery.type
+        - name: bootstrap.memory_lock
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: bootstrap.memory_lock
+        - name: ES_JAVA_OPTS
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: ES_JAVA_OPTS
+        - name: xpack.security.enabled
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: xpack.security.enabled
+        - name: xpack.security.authc.api_key.enabled
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: xpack.security.authc.api_key.enabled
+        - name: xpack.monitoring.collection.enabled
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: xpack.monitoring.collection.enabled
+        - name: xpack.security.enrollment.enabled
+        - value:
+            valueFrom:
+              configMapKeyRef:
+                name: env-values 
+                key: xpack.security.enrollment.enabled
+      ports:
+        - containerPort: 9200
+        - containerPort: 9300
+      
+      resources:
+        limits:
+          memory: 4Gi
+          cpu: 1
